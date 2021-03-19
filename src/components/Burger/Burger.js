@@ -4,6 +4,7 @@ import styles from './Burger.module.css'
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
 const burger = (props) => {
+
     const transformedIngredients = Object.keys(props.ingredients)
         .map(ingKey => {
             console.log(ingKey, props.ingredients[ingKey]);
