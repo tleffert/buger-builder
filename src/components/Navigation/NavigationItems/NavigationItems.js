@@ -7,14 +7,14 @@ import styles from './NavigationItems.module.css';
 const navigationItems = () => (
     <ul className={styles.NavigationItems}>
         <NavigationItem
-            link="/" active
+            link="/"
         >
             Burger Builder
         </NavigationItem>
         <NavigationItem
-            link="/"
+            link="/orders"
         >
-            Checkout
+            Orders
         </NavigationItem>
     </ul>
 );
