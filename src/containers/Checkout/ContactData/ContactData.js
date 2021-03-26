@@ -10,11 +10,55 @@ import styles from './ContactData.module.css';
 class ContactData extends Component {
     state = {
         loading: false,
-        name: '',
-        email: '',
-        address: {
-            street: '',
-            postalCode: ''
+        orderForm: {
+
+            name: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Your Name'
+                },
+                value: ''
+            },
+            street: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Your street'
+                },
+                value: ''
+            },
+            zip:  {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Your zip'
+                },
+                value: ''
+            },
+            country: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Your Country'
+                },
+                value: ''
+            },
+            email: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'email',
+                    placeholder: 'email@email.com'
+                },
+                value: ''
+            },
+            deliveryMethod: {
+                elementType: 'select',
+                elementConfig: {
+                    options: [{value: 'slow', label: 'SLOW'}, {value: 'fast', label: 'FAST'}]
+                },
+                value: ''
+            }
         }
     }
 
@@ -52,17 +96,46 @@ class ContactData extends Component {
                 });
                 this.props.history.push('/');
             })
+    }
 
+    inputChangeHandler = (event, inputId) => {
+        const updatedOrderForm = {
+            ...this.state.orderForm
+        };
+
+        const updatedFormEle = {
+            ...updatedOrderForm[inputId]
+        };
+
+        updatedFormEle.value = event.target.value;
+        updatedOrderForm[inputId] = updatedFormEle;
+        this.setState({
+            orderForm: updatedOrderForm
+        })
     }
 
     render() {
+        const formElementsArray = [];
+
+        for (let key in this.state.orderForm) {
+            console.log(key, this.state.orderForm[key]);
+            formElementsArray.push({
+                id: key,
+                config: this.state.orderForm[key]
+            })
+        }
 
         let form = (
             <form>
-                <Input inputtype="input" type="text" name="name" placeholder="Tim"/>
-                <Input inputtype="input" type="email" name="email" placeholder="Tim@sausages.com"/>
-                <Input inputtype="input" type="text" name="street" placeholder="Tim"/>
-                <Input inputtype="input" type="text" name="postal" placeholder="Tim"/>
+                {formElementsArray.map(formElement => (
+                    <Input
+                        key={formElement.id}
+                        elementType={formElement.config.elementType}
+                        elementConfig={formElement.config.elementConfig}
+                        value={formElement.config.value}
+                        change={(event) => this.inputChangeHandler(event, formElement.id)}
+                    />
+                ))}
                 <Button btnType="Success" clicked={this.orderHandler}>Order</Button>
             </form>
         );
@@ -70,7 +143,6 @@ class ContactData extends Component {
         if (this.state.loading) {
             form = <Spinner />;
         }
-
 
         return (
             <div className={styles.ContactData}>
