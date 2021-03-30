@@ -6,30 +6,20 @@ import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import OrdersApi from '../../axios-orders';
-import axios from 'axios';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../components/withErrorHandler/withErrorHandler';
-import {addIngredient, removeIngredient} from '../../store/actions/index';
+import {addIngredient, removeIngredient, initIngredients} from '../../store/actions/index';
 
 class BurgerBuilder extends Component {
 
     state = {
         totalPrice: 4,
         purchasable: false,
-        purchasing: false,
-        error: null,
-        loading: false
+        purchasing: false
     }
 
     componentDidMount() {
-        // axios.get('https://react-burger-builder-bcdd6-default-rtdb.firebaseio.com/ingredients.json')
-        //     .then(({data}) => {
-        //         this.setState({
-        //             ingredients: data
-        //         });
-        //     }).catch(error => {
-        //         this.setState({error: error});
-        //     })
+        this.props.onInitIngredients();
     }
 
     updatePurchaseState(ingredients) {
@@ -72,10 +62,6 @@ class BurgerBuilder extends Component {
 
         let orderSummary = null;
 
-        if (this.state.loading) {
-            orderSummary = <Spinner />
-        }
-
         let burger = this.state.error ? <p>Ingredients can't be loaded</p> : <Spinner />;
 
         if (this.props.ingredients) {
@@ -116,14 +102,16 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => {
     return {
         ingredients: state.ingredients,
-        totalPrice: state.totalPrice
+        totalPrice: state.totalPrice,
+        error: state.error
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         onIngredientAdd: (ingredient) => dispatch(addIngredient(ingredient)),
-        onIngredientRemove: (ingredient) => dispatch(removeIngredient(ingredient))
+        onIngredientRemove: (ingredient) => dispatch(removeIngredient(ingredient)),
+        onInitIngredients: () => dispatch(initIngredients())
     };
 }
 
