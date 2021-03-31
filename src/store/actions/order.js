@@ -32,7 +32,7 @@ export const purchaseBurger = (orderData) => {
         dispatch(purchaseBurgerStart());
         axois.post('/orders.json', orderData)
             .then(({data}) => {
-                dispatch(purchaseBurgerSuccess(data.id, orderData));
+                dispatch(purchaseBurgerSuccess(data.name, orderData));
             })
             .catch(error => {
                 dispatch(purchaseBurgerFail(error));
