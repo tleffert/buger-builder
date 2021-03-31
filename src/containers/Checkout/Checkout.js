@@ -3,37 +3,10 @@ import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
+import { purchaseInit } from '../../store/actions/index'
 import ContactData from './ContactData/ContactData';
 
 class Checkout extends Component {
-
-    state = {
-        ingredients: {
-            salad: 1,
-            meat: 1,
-            cheese: 1,
-            bacon: 1
-        },
-        totalPrice: null
-    }
-
-    componentWillMount() {
-        const query = new URLSearchParams(this.props.location.search);
-        let ingredients = {};
-        let price = null;
-        for(const [key, value] of query.entries()) {
-            if (key === 'price') {
-                price = +value;
-            } else {
-                ingredients[key] = +value;
-            }
-
-        }
-        this.setState({
-            ingredients: ingredients,
-            totalPrice: price
-        });
-    }
 
     checkoutCancelledHandler = () => {
         this.props.history.goBack();
@@ -46,10 +19,12 @@ class Checkout extends Component {
     render() {
 
         let summary = <Redirect to="/" />;
-
+        console.log("DID THIS UPDATEA", this.props);
         if ( this.props.ingredients ) {
+            const purchasedRedirect = this.props.purchased ? <Redirect to="/" /> : null;
             summary = (
                 <div>
+                    {purchasedRedirect}
                     <CheckoutSummary ingredients={this.props.ingredients}
                         checkoutCancelled={this.checkoutCancelledHandler}
                         checkoutContinued={this.checkoutContinuedHandler}
@@ -69,6 +44,7 @@ class Checkout extends Component {
 const mapStateToProps = state => {
     return {
         ingredients: state.burgerBuilder.ingredients,
+        purchased: state.order.purchased
     }
 }
 
