@@ -1,5 +1,5 @@
 import { AUTH_START, AUTH_SUCCESS, AUTH_FAILED,
-    SIGNUP_START, SIGNUP_SUCCESS, SIGNUP_FAILED } from '../actions/actions';
+    SIGNUP_START, SIGNUP_SUCCESS, SIGNUP_FAILED, SIGNOUT } from '../actions/actions';
 
 const initState = {
     token: null,
@@ -36,6 +36,12 @@ const reducer = (state = initState, action) => {
                 ...state,
                 error: action.payload.error,
                 loading: false
+            }
+        }
+
+        case SIGNOUT: {
+            return {
+                ...initState
             }
         }
     }

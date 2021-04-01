@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { AUTH_START, AUTH_FAILED, AUTH_SUCCESS,
-    SIGNUP_START, SIGNUP_SUCCESS, SIGNUP_FAILED } from './actions';
+    SIGNUP_START, SIGNUP_SUCCESS, SIGNUP_FAILED, SIGNOUT } from './actions';
 
 
 export const authStart = () => {
@@ -42,8 +42,8 @@ export const auth = (email, pass) => {
             authData
         )
         .then(({data}) => {
-            console.log(data);
-            dispatch(authSucess(data))
+            dispatch(authSucess(data));
+            dispatch(checkAuthTimeout(data.expiresIn));
         })
         .catch(err => {
             dispatch(authFailed(err.response.data.error));
@@ -91,10 +91,25 @@ export const signup = (email, pass) => {
             signupData
         )
         .then(({data}) => {
-            dispatch(signupSucess(data))
+            dispatch(signupSucess(data));
+            dispatch(checkAuthTimeout(data.expiresIn));
         })
         .catch(err => {
             dispatch(signFailed(err.response.data.error));
         })
+    }
+}
+
+export const logout = () => {
+    return {
+        type: SIGNOUT
+    }
+}
+
+export const checkAuthTimeout = (expiresIn) => {
+    return (dispatch) => {
+        setTimeout(() => {
+            dispatch(logout());
+        }, expiresIn * 1000)
     }
 }
