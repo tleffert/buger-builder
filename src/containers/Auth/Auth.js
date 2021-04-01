@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
-import { auth } from '../../store/actions/index';
+import { auth, signup } from '../../store/actions/index';
 
 import styles from './Auth.module.css';
 
@@ -39,7 +39,8 @@ class Auth extends Component {
                 valid: false,
                 touched: false
             },
-        }
+        },
+        isSignup: false
 
     }
 
@@ -91,7 +92,20 @@ class Auth extends Component {
 
     submitHandler = (event) => {
         event.preventDefault();
-        this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value);
+        const email = this.state.controls.email.value;
+        const pass = this.state.controls.password.value;
+
+        if (this.state.isSignup) {
+            this.props.onSignup(email, pass);
+        } else {
+            this.props.onAuth(email, pass);
+        }
+    }
+
+    switchAuthHandler = () => {
+        this.setState(prevState => {
+            return {isSignup: !prevState.isSignup}
+        })
     }
 
     render() {
@@ -124,14 +138,19 @@ class Auth extends Component {
                     {form}
                     <Button btnType="Success">Submit</Button>
                 </form>
+                <Button btnType="Danger"
+                    clicked={this.switchAuthHandler}
+                >Switch to {this.state.isSignup ? 'Sign in' : 'Signup'}</Button>
             </div>
+
         );
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onAuth: (email, pass) => dispatch(auth(email, pass))
+        onAuth: (email, pass) => dispatch(auth(email, pass)),
+        onSignup: (email, pass) => dispatch(signup(email, pass))
     }
 }
 
