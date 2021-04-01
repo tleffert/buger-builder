@@ -34,7 +34,7 @@ const reducer = (state = initState, action) => {
         case AUTH_FAILED: {
             return {
                 ...state,
-                error: true,
+                error: action.payload.error,
                 loading: false
             }
         }

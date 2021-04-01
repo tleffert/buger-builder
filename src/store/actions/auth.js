@@ -23,7 +23,9 @@ export const authSucess = (authData) => {
 export const authFailed = (err) => {
     return {
         type: AUTH_FAILED,
-        error: err
+        payload: {
+            error: err
+        }
     }
 }
 
@@ -44,8 +46,7 @@ export const auth = (email, pass) => {
             dispatch(authSucess(data))
         })
         .catch(err => {
-            console.log(err);
-            dispatch(authFailed(err));
+            dispatch(authFailed(err.response.data.error));
         })
     }
 }
@@ -69,7 +70,9 @@ export const signupSucess = (authData) => {
 export const signFailed = (err) => {
     return {
         type: SIGNUP_FAILED,
-        error: err
+        payload: {
+            error: err
+        }
     }
 }
 
@@ -91,8 +94,7 @@ export const signup = (email, pass) => {
             dispatch(signupSucess(data))
         })
         .catch(err => {
-            console.log(err);
-            dispatch(signFailed(err));
+            dispatch(signFailed(err.response.data.error));
         })
     }
 }

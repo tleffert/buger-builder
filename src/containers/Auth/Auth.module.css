@@ -12,6 +12,10 @@
     display: block;
 }
 
+.Danger {
+    color: red;
+}
+
 @media (min-width: 600px) {
     .Auth {
         width: 500px;

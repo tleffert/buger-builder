@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
+import Spinner from '../../components/UI/Spinner/Spinner';
+
 import { auth, signup } from '../../store/actions/index';
 
 import styles from './Auth.module.css';
@@ -119,21 +121,34 @@ class Auth extends Component {
             })
         }
 
-        const form = formElementsArray.map(ele => (
-            <Input
-                key={ele.id}
-                elementType={ele.config.elementType}
-                elementConfig={ele.config.elementConfig}
-                value={ele.config.value}
-                invalid={!ele.config.valid}
-                shouldValidate={ele.config.validation}
-                touched={ele.config.touched}
-                change={(event) => this.inputChangeHandler(event, ele.id)}
-            />
-        ));
+        let form = <Spinner />;
+
+        if (!this.props.authLoading) {
+            form = formElementsArray.map(ele => (
+               <Input
+                   key={ele.id}
+                   elementType={ele.config.elementType}
+                   elementConfig={ele.config.elementConfig}
+                   value={ele.config.value}
+                   invalid={!ele.config.valid}
+                   shouldValidate={ele.config.validation}
+                   touched={ele.config.touched}
+                   change={(event) => this.inputChangeHandler(event, ele.id)}
+               />
+           ));
+        }
+
+        let errorMessage = null;
+
+        if (this.props.authError) {
+            errorMessage = (
+                <p>{this.props.authError.message}</p>
+            );
+        }
 
         return (
             <div className={styles.Auth}>
+                {errorMessage ? <small className={styles.Danger}>{errorMessage}</small> : null}
                 <form onSubmit={this.submitHandler}>
                     {form}
                     <Button btnType="Success">Submit</Button>
@@ -147,6 +162,13 @@ class Auth extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        authLoading: state.auth.loading,
+        authError: state.auth.error
+    }
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
         onAuth: (email, pass) => dispatch(auth(email, pass)),
@@ -154,4 +176,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(Auth);
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);
