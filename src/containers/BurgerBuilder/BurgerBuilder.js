@@ -8,7 +8,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import OrdersApi from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../components/withErrorHandler/withErrorHandler';
-import {addIngredient, removeIngredient, initIngredients, purchaseInit} from '../../store/actions/index';
+import {addIngredient, removeIngredient, initIngredients, purchaseInit, setAuthRedirect} from '../../store/actions/index';
 
 class BurgerBuilder extends Component {
 
@@ -40,6 +40,7 @@ class BurgerBuilder extends Component {
                 purchasing: true
             });
         } else {
+            this.props.onSetRedirectPath('/checkout');
             this.props.history.push('/auth');
         }
     }
@@ -119,7 +120,8 @@ const mapDispatchToProps = dispatch => {
         onIngredientAdd: (ingredient) => dispatch(addIngredient(ingredient)),
         onIngredientRemove: (ingredient) => dispatch(removeIngredient(ingredient)),
         onInitIngredients: () => dispatch(initIngredients()),
-        onInitPurchase: () => dispatch(purchaseInit())
+        onInitPurchase: () => dispatch(purchaseInit()),
+        onSetRedirectPath: (path) => dispatch(setAuthRedirect(path))
     };
 }
 

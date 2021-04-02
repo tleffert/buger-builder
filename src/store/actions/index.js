@@ -13,5 +13,7 @@ export {
 export {
     auth,
     signup,
-    logout
+    logout,
+    setAuthRedirect,
+    authCheckState
 } from './auth';

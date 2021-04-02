@@ -6,7 +6,7 @@ import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
-import { auth, signup } from '../../store/actions/index';
+import { auth, signup, setAuthRedirect } from '../../store/actions/index';
 
 import styles from './Auth.module.css';
 
@@ -45,6 +45,12 @@ class Auth extends Component {
         },
         isSignup: false
 
+    }
+
+    componentDidMount() {
+        if (!this.props.bbBuilding && this.props.authRedirect !== '/') {
+            this.props.onSetAuthRedirect();
+        }
     }
 
     checkValidity(value, rules) {
@@ -150,7 +156,7 @@ class Auth extends Component {
         let authRedirect = null;
 
         if (this.props.isAuthenticated) {
-            authRedirect = <Redirect to="/" />;
+            authRedirect = <Redirect to={this.props.authRedirect} />;
         }
 
         return (
@@ -174,14 +180,17 @@ const mapStateToProps = (state) => {
     return {
         authLoading: state.auth.loading,
         authError: state.auth.error,
-        isAuthenticated: !!state.auth.token
+        isAuthenticated: !!state.auth.token,
+        bbBuilding: state.burgerBuilder.building,
+        authRedirect: state.auth.authRedirect
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         onAuth: (email, pass) => dispatch(auth(email, pass)),
-        onSignup: (email, pass) => dispatch(signup(email, pass))
+        onSignup: (email, pass) => dispatch(signup(email, pass)),
+        onSetAuthRedirect: () => dispatch(setAuthRedirect('/'))
     }
 }
 

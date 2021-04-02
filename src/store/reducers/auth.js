@@ -1,11 +1,12 @@
 import { AUTH_START, AUTH_SUCCESS, AUTH_FAILED,
-    SIGNUP_START, SIGNUP_SUCCESS, SIGNUP_FAILED, SIGNOUT } from '../actions/actions';
+    SIGNUP_START, SIGNUP_SUCCESS, SIGNUP_FAILED, SIGNOUT, SET_AUTH_REDIRECT } from '../actions/actions';
 
 const initState = {
     token: null,
     id: null,
     error: null,
-    loading: false
+    loading: false,
+    authRedirect: '/'
 }
 
 const reducer = (state = initState, action) => {
@@ -42,6 +43,13 @@ const reducer = (state = initState, action) => {
         case SIGNOUT: {
             return {
                 ...initState
+            }
+        }
+
+        case SET_AUTH_REDIRECT: {
+            return {
+                ...state,
+                authRedirect: action.payload.path
             }
         }
     }

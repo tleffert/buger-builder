@@ -21,3 +21,5 @@ export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const SIGNUP_FAILED = 'SIGNUP_FAILED';
 
 export const SIGNOUT = 'SIGNOUT';
+
+export const SET_AUTH_REDIRECT = 'SET_AUTH_REDIRECT';

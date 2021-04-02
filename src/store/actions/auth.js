@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { AUTH_START, AUTH_FAILED, AUTH_SUCCESS,
-    SIGNUP_START, SIGNUP_SUCCESS, SIGNUP_FAILED, SIGNOUT } from './actions';
+    SIGNUP_START, SIGNUP_SUCCESS, SIGNUP_FAILED, SIGNOUT, SET_AUTH_REDIRECT } from './actions';
 
 
 export const authStart = () => {
@@ -42,6 +42,10 @@ export const auth = (email, pass) => {
             authData
         )
         .then(({data}) => {
+            const expireDate =  new Date(new Date().getTime() + (data.expiresIn * 1000));
+            localStorage.setItem('token', data.idToken);
+            localStorage.setItem('expirationDate', expireDate);
+            localStorage.setItem('userId', data.localId);
             dispatch(authSucess(data));
             dispatch(checkAuthTimeout(data.expiresIn));
         })
@@ -91,6 +95,10 @@ export const signup = (email, pass) => {
             signupData
         )
         .then(({data}) => {
+            const expireDAte =  new Date(new Date() + (data.expiresIn * 1000));
+            localStorage.setItem('token', data.idToken);
+            localStorage.setItem('expirationDate', expireDAte);
+            localStorage.setItem('userId', data.localId);
             dispatch(signupSucess(data));
             dispatch(checkAuthTimeout(data.expiresIn));
         })
@@ -101,6 +109,9 @@ export const signup = (email, pass) => {
 }
 
 export const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('expirationDate');
+    localStorage.removeItem('userId');
     return {
         type: SIGNOUT
     }
@@ -111,5 +122,29 @@ export const checkAuthTimeout = (expiresIn) => {
         setTimeout(() => {
             dispatch(logout());
         }, expiresIn * 1000)
+    }
+}
+
+export const authCheckState = () => {
+    return (dispatch) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            dispatch(logout());
+        } else {
+            const expireDate = new Date(localStorage.getItem('expirationDate'));
+            if (expireDate > new Date()) {
+                dispatch(authSucess({idToken: token, localId: localStorage.getItem('userId')}));
+                dispatch(checkAuthTimeout(new Date().getSeconds() - expireDate.getSeconds()));
+            } else {
+                dispatch(logout());
+            }
+        }
+    }
+}
+
+export const setAuthRedirect = (path) => {
+    return {
+        type: SET_AUTH_REDIRECT,
+        payload: {path: path}
     }
 }
