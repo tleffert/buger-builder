@@ -5,10 +5,10 @@
     display: flex;
     align-items: center;
     height: 100%;
-    flex-flow: row;
+    flex-flow: column;
 }
 
-@media (mind-width: 500px) {
+@media (min-width: 500px) {
     .NavigationItems {
         flex-flow: row;
     }
