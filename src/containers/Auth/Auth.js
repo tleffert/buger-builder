@@ -58,7 +58,7 @@ const Auth = (props) => {
             [controlName]: {
                 ...controls[controlName],
                 value: event.target.value,
-                valid: checkValidity(event.target.value, this.state.controls[controlName].validation),
+                valid: checkValidity(event.target.value, controls[controlName].validation),
                 touched: true
             }
         };
