@@ -8,14 +8,11 @@ import { authCheckState } from './store/actions/index';
 
 import Layout from './components/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
-import Checkout from './containers/Checkout/Checkout';
-import Orders from './containers/Orders/Orders';
-import Auth from './containers/Auth/Auth';
 import Logout from './containers/Auth/Logout/Logout';
 
-const asyncCheckout = lazy(() => import ('./containers/Checkout/Checkout'));
-const asyncAuth = lazy(() => import('./containers/Auth/Auth'));
-const asyncOrders = lazy(() => import('./containers/Orders/Orders'));
+const Checkout = lazy(() => import ('./containers/Checkout/Checkout'));
+const Auth = lazy(() => import('./containers/Auth/Auth'));
+const Orders = lazy(() => import('./containers/Orders/Orders'));
 
 
 const App = (props) => {
@@ -27,7 +24,7 @@ const App = (props) => {
         let routes = (
 
             <Switch>
-                <Route path="/auth" component={asyncAuth} />
+                <Route path="/auth" component={Auth} />
                 <Route path="/" exact component={BurgerBuilder} />
                 <Redirect to="/" />
             </Switch>
@@ -36,9 +33,9 @@ const App = (props) => {
         if (props.isAuthenticated) {
             routes = (
                 <Switch>
-                    <Route path="/checkout" component={asyncCheckout} />
-                    <Route path="/orders" component={asyncOrders} />
-                    <Route path="/auth" component={asyncAuth} />
+                    <Route path="/checkout" component={Checkout} />
+                    <Route path="/orders" component={Orders} />
+                    <Route path="/auth" component={Auth} />
                     <Route path="/logout" component={Logout} />
                     <Route path="/" exact component={BurgerBuilder} />
                     <Redirect to="/" />
