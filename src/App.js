@@ -1,6 +1,6 @@
 import './App.css';
 
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component, Suspense, lazy, useEffect } from 'react';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -18,13 +18,11 @@ const asyncAuth = lazy(() => import('./containers/Auth/Auth'));
 const asyncOrders = lazy(() => import('./containers/Orders/Orders'));
 
 
-class App extends Component {
+const App = (props) => {
 
-    componentDidMount() {
-        this.props.onTryAutoSignin();
-    }
-
-    render() {
+    useEffect(() => {
+        props.onTryAutoSignin();
+    }, []);
 
         let routes = (
 
@@ -35,7 +33,7 @@ class App extends Component {
             </Switch>
         );
 
-        if (this.props.isAuthenticated) {
+        if (props.isAuthenticated) {
             routes = (
                 <Switch>
                     <Route path="/checkout" component={asyncCheckout} />
@@ -57,7 +55,6 @@ class App extends Component {
                 </Suspense>
             </div>
         );
-    }
 }
 
 const mapStateToProps = (state) => {
