@@ -16,10 +16,11 @@ const Orders = lazy(() => import('./containers/Orders/Orders'));
 
 
 const App = (props) => {
+    const {onTryAutoSignin} = props;
 
     useEffect(() => {
-        props.onTryAutoSignin();
-    }, []);
+        onTryAutoSignin();
+    }, [onTryAutoSignin]);
 
         let routes = (
 

@@ -4,12 +4,9 @@ import Backdrop from '../Backdrop/Backdrop';
 
 const Modal = (props) => {
 
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     return nextProps.show !== this.props.show || this.props.children !== nextProps.children;
-    // }
     return (
         <Fragment>
-            <Backdrop show={this.props.show} clicked={props.modalClosed}/>
+            <Backdrop show={props.show} clicked={props.modalClosed}/>
             <div
                 className={styles.Modal}
                 style={{
