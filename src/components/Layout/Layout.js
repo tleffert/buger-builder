@@ -5,13 +5,9 @@ import Toolbar from '../Navigation/Toolbar/Toolbar';
 import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
 import styles from './Layout.module.css';
 
-class Layout extends Component {
+const Layout = (props) => {
 
     const [sideDrawerIsVisible, setDrawerVisibility] = useState(false);
-
-    state = {
-        showSideDrawer: true
-    }
 
     const sideDrawrClosedHandler = () => {
         setDrawerVisibility(false);
